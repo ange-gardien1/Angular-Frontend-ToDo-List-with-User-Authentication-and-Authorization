@@ -21,7 +21,12 @@ export class LoginComponent implements OnInit{
   }
   login(){
     this.userService.login(this.email, this.password).subscribe((response:any)=>{
-      this
+      this.router.navigateByUrl('/home');
+
+    }, error => {
+      console.log('Error:', error);
+      window.alert('login Failed. Try agaun to login');
+      this.router.navigateByUrl('/login');
     })
   }
 }
