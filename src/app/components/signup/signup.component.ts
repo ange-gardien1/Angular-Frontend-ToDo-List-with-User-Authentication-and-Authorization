@@ -10,10 +10,17 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class SignupComponent implements OnInit{
   newUser : User = new User({});
-
+  errorMessage: string = '';
   constructor(private userservice: UserService, private router : Router){}
 
   ngOnInit(): void {
+
+    this.userservice.registrationSuccess$.subscribe(success => {
+      if (success) {
+        this.router.navigate(['login']);
+        // Or display a success message here if needed
+      }
+    });
     
   }
 
@@ -21,10 +28,13 @@ export class SignupComponent implements OnInit{
   {
     this.userservice.Signup(this.newUser).subscribe(() => {
       this.router.navigate(['login']);
-    }, error => {
-      window.alert("user Signup Failed, Try again to login");
-      console.log('error:', error)
-    });
+    },
     
+    (error) => {
+      this.errorMessage = error;
+        console.error('Error:', error);
+    
+    }
+    );
   }
 }

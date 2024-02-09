@@ -1,7 +1,9 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
 import { User } from '../modules/user';
+import { throwError as observableThrowError } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -12,6 +14,8 @@ export class UserService {
   private token : string ='myChallengeToken';
   private _isLoggedIn = new BehaviorSubject(false);
   isLoggedIn = this._isLoggedIn.asObservable();
+   private regisrationSuccesSubject = new BehaviorSubject<boolean>(false);
+   registrationSuccess$ = this.regisrationSuccesSubject.asObservable();
 
   constructor(private http:HttpClient) {
 
@@ -23,7 +27,24 @@ export class UserService {
 
    Signup(newUser : User)
    {
-    return this.http.post(this.databaseUrl + '/register', newUser);
+    let errorMessage = 'use Registration Successfuly';
+    return this.http.post(this.databaseUrl + '/register', newUser)
+    .pipe(tap(() => {
+
+      this.regisrationSuccesSubject.next(true);
+    }),
+    catchError((error: HttpErrorResponse) => {
+     
+
+      if (error.status === 400 && error.error)
+      {
+        errorMessage = error.error;
+      }
+      
+
+      return observableThrowError(errorMessage);
+    })
+    );
 
    }
    login(email : string, password: string)
