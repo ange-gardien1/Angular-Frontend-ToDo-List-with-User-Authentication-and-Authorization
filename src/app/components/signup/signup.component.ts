@@ -15,26 +15,21 @@ export class SignupComponent implements OnInit{
 
   ngOnInit(): void {
 
-    this.userservice.registrationSuccess$.subscribe(success => {
-      if (success) {
-        this.router.navigate(['login']);
-        // Or display a success message here if needed
-      }
-    });
-    
   }
 
   signup()
+  
   {
     this.userservice.Signup(this.newUser).subscribe(() => {
       this.router.navigate(['login']);
     },
     
     (error) => {
-      this.errorMessage = error;
-        console.error('Error:', error);
-    
+   
+      this.errorMessage = error.error?.message;
+      console.error('Error:', error);
+
     }
-    );
+    )
   }
 }

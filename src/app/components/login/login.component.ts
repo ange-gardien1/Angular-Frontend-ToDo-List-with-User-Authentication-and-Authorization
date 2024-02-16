@@ -11,6 +11,7 @@ export class LoginComponent implements OnInit{
 
   email: string = '';
   password: string = '';
+  errorMessage : string ='';
 
   constructor(private userService : UserService, private router : Router)
   {
@@ -20,14 +21,21 @@ export class LoginComponent implements OnInit{
     
   }
   login(){
-    this.userService.login(this.email, this.password).subscribe((response:any)=>{
-      this.router.navigateByUrl('/home');
-
-    }, error => {
-      console.log('Error:', error);
-      window.alert('login Failed. Try agaun to login');
-      this.router.navigateByUrl('/login');
-    })
+    this.userService.login(this.email, this.password).subscribe(
+      (response: any) => {
+        this.router.navigateByUrl('/home');
+      },
+      (error) => {
+        console.error('Login Error:', error);
+        if (error.status === 401) {
+         this.errorMessage = "Invalid Email or password, Please try again.";
+        } else {
+         this.errorMessage = 'Login Failed. please try again later';
+        }
+        this.router.navigateByUrl('/login');
+      }
+    );
+    
   }
 }
 

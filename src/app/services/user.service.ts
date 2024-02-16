@@ -25,28 +25,27 @@ export class UserService {
     }
    }
 
-   Signup(newUser : User)
-   {
-    let errorMessage = 'use Registration Successfuly';
+   
+   Signup(newUser: User) {
     return this.http.post(this.databaseUrl + '/register', newUser)
-    .pipe(tap(() => {
-
-      this.regisrationSuccesSubject.next(true);
-    }),
-    catchError((error: HttpErrorResponse) => {
-     
-
-      if (error.status === 400 && error.error)
-      {
-        errorMessage = error.error;
-      }
-      
-
-      return observableThrowError(errorMessage);
-    })
+      .pipe(tap(() => {
+        this.regisrationSuccesSubject.next(true);
+      }),
+      catchError((error: HttpErrorResponse) => {
+        let errorMessage = 'User registration failed. Please try again.';
+  
+        if (error.status === 400 && error.error) {
+          errorMessage = error.error;
+        }
+  
+        return throwError(errorMessage);
+      })
     );
-
    }
+ 
+  
+
+
    login(email : string, password: string)
    {
      let querryParams = new HttpParams();
