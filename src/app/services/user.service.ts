@@ -17,6 +17,8 @@ export class UserService {
    private regisrationSuccesSubject = new BehaviorSubject<boolean>(false);
    registrationSuccess$ = this.regisrationSuccesSubject.asObservable();
 
+  errorMessage : string = '';
+   
   constructor(private http:HttpClient) {
 
     if(localStorage.getItem(this.token))
@@ -28,19 +30,23 @@ export class UserService {
    
    Signup(newUser: User) {
     return this.http.post(this.databaseUrl + '/register', newUser)
-      .pipe(tap(() => {
+      .pipe(
+        tap(() => {
         this.regisrationSuccesSubject.next(true);
       }),
-      catchError((error: HttpErrorResponse) => {
-        let errorMessage = 'User registration failed. Please try again.';
+catchError((error: HttpErrorResponse) => {
+        let errorMessage = error.error;
   
-        if (error.status === 400 && error.error) {
-          errorMessage = error.error;
+        if (error.status === 400  && error.error.message) {
+
+       errorMessage = error.error.message;
+       
         }
   
-        return throwError(errorMessage);
+    return throwError(errorMessage);
+
       })
-    );
+      );
    }
  
   
