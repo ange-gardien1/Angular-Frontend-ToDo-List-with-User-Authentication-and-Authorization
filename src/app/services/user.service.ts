@@ -28,19 +28,20 @@ export class UserService {
    }
 
    
-   Signup(newUser: User) {
+   Signup(newUser: User) :Observable<any>{
     return this.http.post(this.databaseUrl + '/register', newUser)
       .pipe(
         tap(() => {
         this.regisrationSuccesSubject.next(true);
       }),
+
 catchError((error: HttpErrorResponse) => {
         let errorMessage = error.error;
   
         if (error.status === 400  && error.error.message) {
 
        errorMessage = error.error.message;
-       
+
         }
   
     return throwError(errorMessage);

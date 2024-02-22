@@ -11,7 +11,8 @@ import { UserService } from 'src/app/services/user.service';
 export class SignupComponent implements OnInit{
   newUser : User = new User({});
   errorMessage: string = '';
-  constructor(private userservice: UserService, private router : Router){}
+  constructor(private userservice: UserService, private router : Router)
+  {}
 
   ngOnInit(): void {
 
@@ -27,10 +28,8 @@ export class SignupComponent implements OnInit{
     (error : any) => {
    
       this.errorMessage = error;
-      console.error('Error:', this.errorMessage);
-      console.log('error', error);
-     
-
+      // console.error('Error:', this.errorMessage);
+      // console.log('error', error);
     }
     )
   }
