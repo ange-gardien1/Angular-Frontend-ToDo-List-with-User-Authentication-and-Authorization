@@ -1,12 +1,24 @@
 
+<!-- <h1>My DashBoard</h1>
 
-<div *ngIf="user">
-    <h2>Welcome, {{ user.names }}!</h2>
+<div *ngIf="curentuser">
+    <h2>Welcome, {{ curentuser.names }}!</h2>
+    <form (submit)="createTask()">
+      <label for="newTask">New Task:</label>
+      <input type="text" id="newTask" [(ngModel)]="newTaskName" />
+      <button type="submit">Add Task</button>
+    </form>
     <h3>Your Todo List:</h3>
     <ul>
       <li *ngFor="let task of tasks">
         {{ task.taskname }} - {{ task.completed ? 'Completed' : 'Pending' }}
       </li>
     </ul>
+  </div> -->
+
+  <div *ngIf="curentuser">
+    <h2>Welcome, {{ curentuser.names }}!</h2>
+    <!-- Display other user details as needed -->
   </div>
+  
 

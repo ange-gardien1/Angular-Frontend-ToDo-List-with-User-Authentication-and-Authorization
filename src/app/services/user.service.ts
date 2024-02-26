@@ -61,6 +61,7 @@ catchError((error: HttpErrorResponse) => {
      return this.http.get (`${this.databaseUrl}/login`, {params: querryParams, responseType: 'text'})
      .pipe(tap((response : any) => {
       if (response){
+        localStorage.setItem(this.token, response);
         this._isLoggedIn.next(true);
       }
       else{
@@ -76,7 +77,8 @@ catchError((error: HttpErrorResponse) => {
    {
     let reqHeaders = {
       Authorization: `Bearer ${localStorage.getItem(this.token)}`
-    }
+    };
+
     return this.http.get<User>(`${this.databaseUrl}/current`, {headers : reqHeaders})
    }
 }

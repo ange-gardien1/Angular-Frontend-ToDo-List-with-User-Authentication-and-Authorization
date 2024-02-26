@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Task } from 'src/app/modules/task';
 import { User } from 'src/app/modules/user';
 import { TodoService } from 'src/app/services/todo.service';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-my-dashboard',
@@ -12,46 +13,36 @@ import { TodoService } from 'src/app/services/todo.service';
 export class MyDashboardComponent implements OnInit{
 
   userId : number | undefined ;
-  user : User  | undefined;
+  curentuser : User  | undefined;
   tasks: Task[] = [];
+  newTaskName: string = '';
 
-  constructor(private route: ActivatedRoute, private toDoservice : TodoService)
+  constructor(private route: ActivatedRoute, private toDoservice : TodoService, private userService : UserService)
   {  }
 
   ngOnInit(): void {
-    this.route.params.subscribe((params) => {
-      this.userId = params ['id'];
-      if (this.userId !== undefined)
-      {
-        this.loadUserData();
-        this.loadTasks();
-      }
-     
-    });
+   this.userService.getCurrentUser().subscribe((user : User) => {
+    this.curentuser = user
+   })
   }
 
-  private loadUserData()
-  {
-    if (this.userId !== undefined)
-    {
-      this.toDoservice.getCurrentUser(this.userId).subscribe((User) => {
-        this.user = User;
-      });
-    }
-   
-  }
+  
 
-  private loadTasks()
-  {
-    if(this.userId !== undefined)
-    {
-      this.toDoservice.getTasks(this.userId).subscribe((tasks) => {
-        this.tasks = tasks;
-      },
-      (error) => {
-        console.error('Error fetching tasks: ', error);
-      });
+ 
+
+
+  createTask() {
+    if (this.userId !== undefined && this.newTaskName.trim() !== '') {
+      this.toDoservice.createTask(this.userId, this.newTaskName).subscribe(
+        (createdTask) => {
+          this.tasks.push(createdTask);
+          this.newTaskName = ''; // Clear the input field after creating a task
+        },
+        (error) => {
+          console.error('Error creating task:', error);
+        }
+      );
     }
-   
   }
 }
+

@@ -22,4 +22,10 @@ export class TodoService {
    return this.http.get<Task[]>(`${this.databaseUrl}/${userId}`)
   }
 
+  createTask(userId: number, taskName: string): Observable<Task> {
+    const taskData = { userId, taskName, completed: false };
+
+    return this.http.post<Task>(`${this.databaseUrl}/tasks`, taskData);
+  }
+
 }
