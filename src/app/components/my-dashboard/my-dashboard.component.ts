@@ -16,14 +16,26 @@ export class MyDashboardComponent implements OnInit{
   curentuser : User  | undefined;
   tasks: Task[] = [];
   newTaskName: string = '';
-
+  isloggedIn: boolean = false;
   constructor(private route: ActivatedRoute, private toDoservice : TodoService, private userService : UserService)
   {  }
 
   ngOnInit(): void {
-   this.userService.getCurrentUser().subscribe((user : User) => {
-    this.curentuser = user
-   })
+    
+    this.userService.isLoggedIn.subscribe((loggedIn) => {
+      this.isloggedIn = loggedIn;
+      if (loggedIn) {
+        
+        const jwtString = localStorage.getItem('myChallengeToken');
+        this.userService.getCurrentUser().subscribe((user) => {
+          this.curentuser = user;
+        }, 
+        (error) => {
+          console.error('Error retrieving user data', error);
+        })
+      
+      }
+    });
   }
 
   

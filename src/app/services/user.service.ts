@@ -1,6 +1,6 @@
 import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, catchError, tap, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, catchError, map, tap, throwError } from 'rxjs';
 import { User } from '../modules/user';
 import { throwError as observableThrowError } from 'rxjs';
 import { Router } from '@angular/router';
@@ -60,19 +60,23 @@ catchError((error: HttpErrorResponse) => {
      querryParams = querryParams.append('password', password);
      return this.http.get (`${this.databaseUrl}/login`, {params: querryParams, responseType: 'text'})
      .pipe(tap((response : any) => {
+      localStorage.setItem(this.token, response);
       if (response){
-        localStorage.setItem(this.token, response);
-        this._isLoggedIn.next(true);
+       
+          this._isLoggedIn.next(true);  
+       
       }
       else{
         this._isLoggedIn.next(false);
       }
      }));
-   }
+    }
+
    logout(){
     localStorage.removeItem(this.token);
     this._isLoggedIn.next(false);
    }
+
    getCurrentUser() : Observable <User>
    {
     let reqHeaders = {
@@ -80,5 +84,11 @@ catchError((error: HttpErrorResponse) => {
     };
 
     return this.http.get<User>(`${this.databaseUrl}/current`, {headers : reqHeaders})
+     
+    }
+    getUser(id:number): Observable<User>
+    {
+      return this.http.get<User>(`${this.databaseUrl}/${id}`)
+    }
    }
-}
+
