@@ -60,8 +60,8 @@ catchError((error: HttpErrorResponse) => {
      querryParams = querryParams.append('password', password);
      const headers = new HttpHeaders({'content-type' : 'application/json'});
      return this.http.get (`${this.databaseUrl}/login`, {params: querryParams, responseType: 'text', headers})
-     .pipe(tap((response : any) => {
-      localStorage.setItem(this.token, response);
+     .pipe(tap((response) => {
+      localStorage.setItem('myChallengeToken', response);
       if (response){
        
           this._isLoggedIn.next(true);  
