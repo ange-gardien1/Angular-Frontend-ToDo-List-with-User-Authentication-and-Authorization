@@ -9,10 +9,9 @@ import { Router } from '@angular/router';
 })
 export class AppComponent implements OnInit{
   title = 'challengeTod_Frontend';
-  currentUser : any;
+  
   isLoggedIn: boolean = false;
-  isMenuOpen = false;
-  names? = '';
+  currentUser: any;
 
   constructor(private userService: UserService, private router: Router){}
   //  toggleMenu()
@@ -28,9 +27,16 @@ export class AppComponent implements OnInit{
   //   this.userService.isLoggedIn.subscribe(loggedIn => {
   //     this.isLoggedIn = loggedIn;
   //     if (loggedIn) {
-  //         this.userService.getCurrentUser().subscribe(user => {
-  //             this.names = user.names;
-  //         });
+  //       const jwtstring = localStorage.getItem('myChallengeToken')
+  //       if(jwtstring !== null)
+  //       {
+  //         const response = JSON.parse(jwtstring);
+  //         this.currentUser = response.data.user;
+  //       }
+  //       else{
+  //     this.currentUser;
+  //       }
+          
   //     }
   // });
   }

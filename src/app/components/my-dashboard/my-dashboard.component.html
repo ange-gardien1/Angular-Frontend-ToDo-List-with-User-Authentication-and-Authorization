@@ -1,10 +1,9 @@
 
-<h1>My DashBoard</h1>
 
-<!--
 
-<div *ngIf="curentuser">
-    <h2>Welcome, {{ curentuser.names }}!</h2>
+<!-- 
+ <div *ngIf="currentuser">
+    <h2>Welcome, {{ currentuser.names }}!</h2>
     <form (submit)="createTask()">
       <label for="newTask">New Task:</label>
       <input type="text" id="newTask" [(ngModel)]="newTaskName" />
@@ -16,11 +15,10 @@
         {{ task.taskname }} - {{ task.completed ? 'Completed' : 'Pending' }}
       </li>
     </ul>
-  </div> -->
+  </div>  -->
 
-  <div *ngIf="curentuser">
-    <h2>Welcome, {{ curentuser.email }}!</h2>
-    <!-- Display other user details as needed -->
+  <div *ngIf="currentuser">
+     <h2>Welcome, {{currentuser.names}}!</h2> 
   </div>
 
 
