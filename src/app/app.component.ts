@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { UserService } from './services/user.service';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
@@ -13,17 +13,16 @@ export class AppComponent implements OnInit{
   
   isloggedIn: boolean = false;
   currentuser: any;
+  isSticky : boolean = false;
 
   constructor(private userService: UserService, private router: Router){}
-  //  toggleMenu()
-  //  {
-  //   const token = localStorage.getItem('currentuser');
-  //   if(token)
-  //   {
-  //     this.isloggedIn = true;
-  //   }
-  //   this.isMenuOpen = !this.isMenuOpen;
-  //  }
+ @HostListener('window:scroll', ['$event'])
+ handleScroll()
+
+ {
+  const scrollPosition = window.pageYOffset;
+  this.isSticky = scrollPosition > 50;
+ }
   ngOnInit(): void {
     this.userService.isLoggedIn.subscribe((loggedIn) => {
       this.isloggedIn = loggedIn;
@@ -50,5 +49,10 @@ export class AppComponent implements OnInit{
         }
       }
     });
+  }
+
+  logout()
+  {
+    this.userService.logout();
   }
 }
