@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from './services/user.service';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 @Component({
   selector: 'app-root',
@@ -10,8 +11,8 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit{
   title = 'challengeTod_Frontend';
   
-  isLoggedIn: boolean = false;
-  currentUser: any;
+  isloggedIn: boolean = false;
+  currentuser: any;
 
   constructor(private userService: UserService, private router: Router){}
   //  toggleMenu()
@@ -24,20 +25,30 @@ export class AppComponent implements OnInit{
   //   this.isMenuOpen = !this.isMenuOpen;
   //  }
   ngOnInit(): void {
-  //   this.userService.isLoggedIn.subscribe(loggedIn => {
-  //     this.isLoggedIn = loggedIn;
-  //     if (loggedIn) {
-  //       const jwtstring = localStorage.getItem('myChallengeToken')
-  //       if(jwtstring !== null)
-  //       {
-  //         const response = JSON.parse(jwtstring);
-  //         this.currentUser = response.data.user;
-  //       }
-  //       else{
-  //     this.currentUser;
-  //       }
-          
-  //     }
-  // });
+    this.userService.isLoggedIn.subscribe((loggedIn) => {
+      this.isloggedIn = loggedIn;
+      if (loggedIn) {
+        const jwtstring = localStorage.getItem('myChallengeToken');
+        // console.log('Token:', jwtstring);
+  
+        if (jwtstring !== null) {
+          try {
+            const decodedToken: any = jwtDecode(jwtstring);
+            // console.log('Decoded Token:', decodedToken);
+  
+            if (decodedToken && decodedToken.unique_name) {
+              // console.log('User Name:', decodedToken.unique_name);
+              this.currentuser = { name: decodedToken.unique_name };
+            } else {
+              console.error('Invalid JWT structure:', decodedToken);
+            }
+          } catch (error) {
+            console.error('Error decoding JWT:', error);
+          }
+        } else {
+          this.currentuser = null;
+        }
+      }
+    });
   }
 }

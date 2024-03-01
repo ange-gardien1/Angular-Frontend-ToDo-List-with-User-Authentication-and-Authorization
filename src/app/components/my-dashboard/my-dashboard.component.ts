@@ -23,19 +23,20 @@ export class MyDashboardComponent implements OnInit{
   constructor(private route: ActivatedRoute, private toDoservice : TodoService, private userService : UserService)
   {  }
   ngOnInit(): void {
+
     this.userService.isLoggedIn.subscribe((loggedIn) => {
       this.isloggedIn = loggedIn;
       if (loggedIn) {
         const jwtstring = localStorage.getItem('myChallengeToken');
-        console.log('Token:', jwtstring);
+        // console.log('Token:', jwtstring);
   
         if (jwtstring !== null) {
           try {
             const decodedToken: any = jwtDecode(jwtstring);
-            console.log('Decoded Token:', decodedToken);
+            // console.log('Decoded Token:', decodedToken);
   
             if (decodedToken && decodedToken.unique_name) {
-              console.log('User Name:', decodedToken.unique_name);
+              // console.log('User Name:', decodedToken.unique_name);
               this.currentuser = { name: decodedToken.unique_name };
             } else {
               console.error('Invalid JWT structure:', decodedToken);
@@ -48,21 +49,9 @@ export class MyDashboardComponent implements OnInit{
         }
       }
     });
+
+   
   }
-  
-  
-  createTask() {
-    // if (this.userId !== undefined && this.newTaskName.trim() !== '') {
-      // this.toDoservice.createTask(this.userId, this.newTaskName).subscribe(
-  //       (createdTask) => {
-  //         this.tasks.push(createdTask);
-  //         this.newTaskName = ''; // Clear the input field after creating a task
-  //       },
-  //       (error) => {
-  //         console.error('Error creating task:', error);
-  //       }
-  //     );
-  //   }
-  }
+ 
 }
 

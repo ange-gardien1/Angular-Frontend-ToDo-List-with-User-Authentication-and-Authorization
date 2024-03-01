@@ -1,24 +1,8 @@
+<div *ngIf="isloggedIn">
+<h2>Welcome, {{currentuser.name}}!</h2>
 
 
-
-<!-- 
- <div *ngIf="currentuser">
-    <h2>Welcome, {{ currentuser.names }}!</h2>
-    <form (submit)="createTask()">
-      <label for="newTask">New Task:</label>
-      <input type="text" id="newTask" [(ngModel)]="newTaskName" />
-      <button type="submit">Add Task</button>
-    </form>
-    <h3>Your Todo List:</h3>
-    <ul>
-      <li *ngFor="let task of tasks">
-        {{ task.taskname }} - {{ task.completed ? 'Completed' : 'Pending' }}
-      </li>
-    </ul>
-  </div>  -->
-
-  <div *ngIf="currentuser">
-     <h2>Welcome, {{currentuser.name}}!</h2> 
-  </div>
+</div>
+ 
 
 
