@@ -28,7 +28,7 @@ export class MyDashboardComponent implements OnInit{
   constructor(private route: ActivatedRoute, private toDoservice : TodoService, private userService : UserService)
   {  }
   ngOnInit(): void {
-
+   
     this.userService.isLoggedIn.subscribe((loggedIn) => {
       this.isloggedIn = loggedIn;
       if (loggedIn) {
@@ -54,18 +54,25 @@ export class MyDashboardComponent implements OnInit{
         }
       }
     });
-
-  
+    if (this.userId)
+    {
+      this.userService.getCurrentUser(this.userId).subscribe(user => {
+        this.currentuser = new User(user)
+        this.getTasks(user?.userId?? 0);
+      } )
+    }
+   
   }
 
 
  getTasks(id:number)
  {
-  this.toDoservice.getTaskByUserId(id).subscribe(tasks => 
-    
+  this.toDoservice.getTaskByUserId(id).subscribe(tasks => {
+ 
     this.tasks = tasks.map(task => new Task(task))
     
-    )
+  } 
+  )
  }
  
  
@@ -74,7 +81,9 @@ export class MyDashboardComponent implements OnInit{
     this.toDoservice.createTask(this.newTask).subscribe(()=> {
      this.newTask = new Task({});
       this.taskCreated.emit(true);
-  
+
+      console.log('Fetching tasks after creation...');
+      this.getTasks(this.userId);
     });
   }
 

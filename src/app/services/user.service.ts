@@ -81,7 +81,7 @@ catchError((error: HttpErrorResponse) => {
    getCurrentUser() : Observable <any>
    {
     let reqHeaders = localStorage.getItem(this.token);
-    console.log(reqHeaders);
+    // console.log(reqHeaders);
 
     return this.http.get<any>(`${this.databaseUrl}/current`).pipe(
       map((response)=>{
