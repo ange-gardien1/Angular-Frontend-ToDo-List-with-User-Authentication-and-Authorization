@@ -10,7 +10,7 @@ import { Task } from '../modules/task';
 export class TodoService {
  
 apiUrl: string = 'http://localhost:5212/api/Task';
-tokenKey: string = "todoToken";
+tokenKey: string = "myChallengeToken";
 
   constructor(private http:HttpClient) { }
 

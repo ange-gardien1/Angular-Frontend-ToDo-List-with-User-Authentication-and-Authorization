@@ -55,44 +55,45 @@ export class MyDashboardComponent implements OnInit{
       }
     });
 
-   this.loadTasks();
+  
   }
 
-  loadTasks(): void
-  {
-    this.toDoservice.getTaskByUserId(this.userId).subscribe((tasks) => (this.tasks = tasks));
-  }
 
-  onSelect(task : Task): void
-  {
-    this.selectedTask = {...task};
-  }
+ getTasks(id:number)
+ {
+  this.toDoservice.getTaskByUserId(id).subscribe(tasks => 
+    
+    this.tasks = tasks.map(task => new Task(task))
+    
+    )
+ }
+ 
  
   createTask(): void
   { 
     this.toDoservice.createTask(this.newTask).subscribe(()=> {
-      this.loadTasks();
+     this.newTask = new Task({});
       this.taskCreated.emit(true);
   
     });
   }
 
-  updateTask(): void {
-    this.selectedTask.completed = true;
+  // updateTask(): void {
+  //   this.selectedTask.completed = true;
 
-    this.toDoservice.updateTask(this.selectedTask).subscribe(() => {
-      this.loadTasks();
-      this.selectedTask = new Task({});
-    });
-  }
+  //   this.toDoservice.updateTask(this.selectedTask).subscribe(() => {
+   
+  //     this.selectedTask = new Task({});
+  //   });
+  // }
 
-  deleteTask(taskId: number): void
-  {
-    this.toDoservice.deleteTask(taskId).subscribe(()=> {
-      this.loadTasks();
-      this.selectedTask = new Task({});
-    })
-  }
+  // deleteTask(taskId: number): void
+  // {
+  //   this.toDoservice.deleteTask(taskId).subscribe(()=> {
+    
+  //     this.selectedTask = new Task({});
+  //   })
+  // }
 }
 
 
