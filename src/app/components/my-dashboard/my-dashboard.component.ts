@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 import { Task } from 'src/app/modules/task';
@@ -17,8 +17,13 @@ export class MyDashboardComponent implements OnInit{
   isloggedIn: boolean = false;
   currentuser : any = {};
   tasks: Task[] = [];
-  newTaskName: string = '';
-
+  newTask: Task  = new Task({});
+  task: Task[] = [];
+  selectedTask: Task = new Task({});
+  userId : number = 1;
+  
+ @Output()
+  taskCreated = new EventEmitter
 
   constructor(private route: ActivatedRoute, private toDoservice : TodoService, private userService : UserService)
   {  }
@@ -50,8 +55,45 @@ export class MyDashboardComponent implements OnInit{
       }
     });
 
-   
+   this.loadTasks();
+  }
+
+  loadTasks(): void
+  {
+    this.toDoservice.getTaskByUserId(this.userId).subscribe((tasks) => (this.tasks = tasks));
+  }
+
+  onSelect(task : Task): void
+  {
+    this.selectedTask = {...task};
   }
  
+  createTask(): void
+  { 
+    this.toDoservice.createTask(this.newTask).subscribe(()=> {
+      this.loadTasks();
+      this.taskCreated.emit(true);
+  
+    });
+  }
+
+  updateTask(): void {
+    this.selectedTask.completed = true;
+
+    this.toDoservice.updateTask(this.selectedTask).subscribe(() => {
+      this.loadTasks();
+      this.selectedTask = new Task({});
+    });
+  }
+
+  deleteTask(taskId: number): void
+  {
+    this.toDoservice.deleteTask(taskId).subscribe(()=> {
+      this.loadTasks();
+      this.selectedTask = new Task({});
+    })
+  }
 }
+
+
 
