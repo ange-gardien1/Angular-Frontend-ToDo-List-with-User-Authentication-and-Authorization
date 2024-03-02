@@ -13,6 +13,21 @@
   <p>Stay organized and get things done with our ToDo App.</p>
   <a routerLink="/login" class="cta-button">Get Started</a>
 </main>
+<!-- home.component.html -->
+
+<div>
+  <h2>Task List</h2>
+
+  <ul>
+    <!-- Loop through the taskList array and display each task -->
+    <li *ngFor="let task of taskList">
+
+      <span>{{ task.taskname}}</span> <!-- Assuming 'title' is a property of the Task class -->
+      <!-- Add more spans for other properties as needed -->
+    </li>
+  </ul>
+</div>
+  
 
 
   

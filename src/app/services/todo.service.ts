@@ -39,24 +39,13 @@ tokenKey: string = "myChallengeToken";
 //  return this.http.delete(`${this.apiUrl}/${taskId}`, {headers: reqHeaders});
 //   }
  
-  getTaskByUserId(userId: string): Observable<any>
+  getTaskByUserId(userId: number)
   {
-    const stringToken = localStorage.getItem('myChallengeToken');
-    if (stringToken)
-    {
-      const tokenJson = JSON.parse(stringToken);
-      const headers = new HttpHeaders().set('Authorization',`Bearer ${tokenJson.tokenKey}`);
-      return this.http.get<any>(`${this.apiUrl}/user/${userId}`, {
-        headers: headers,
-      })
-      .pipe(map((response) => (response.data ? response.data.task: [])));
-    }
-    else{
-      console.log('invalid token');
-      return of([]);
-    }
-
-    
-    
+    return this.http.get<Task[]>(`${this.apiUrl}/user/${userId}`);
+     
+  }
+  getAllTasks(): Observable<Task[]>
+  {
+    return this.http.get<Task[]>(`${this.apiUrl}`);
   }
 }

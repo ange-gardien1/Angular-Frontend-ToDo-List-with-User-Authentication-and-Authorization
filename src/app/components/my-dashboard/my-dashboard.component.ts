@@ -55,14 +55,9 @@ export class MyDashboardComponent implements OnInit{
       }
     });
   
-     const token = localStorage.getItem('myChallengeToken');
-     if(token)
-     {
-      const tokenNonString = JSON.parse(token);
-      this.currentuser = tokenNonString.data.user;
-     }
-     this.toDoservice.getTaskByUserId(this.currentuser.userId).subscribe((response) => {
-      this.taskList = response;
+   
+     this.toDoservice.getTaskByUserId(this.currentuser.userId).subscribe(() => {
+      this.taskList = this.tasks;
      });
    
   }
