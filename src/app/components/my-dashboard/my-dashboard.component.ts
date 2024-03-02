@@ -16,9 +16,9 @@ export class MyDashboardComponent implements OnInit{
 
   isloggedIn: boolean = false;
   currentuser : any = {};
-  tasks: Task[] = [];
+  tasks: any[] = [];
   newTask: Task  = new Task({});
-  task: Task[] = [];
+  taskList: any[] = [];
   selectedTask: Task = new Task({});
   userId : number = 1;
   
@@ -54,26 +54,21 @@ export class MyDashboardComponent implements OnInit{
         }
       }
     });
-    if (this.userId)
-    {
-      this.userService.getCurrentUser(this.userId).subscribe(user => {
-        this.currentuser = new User(user)
-        this.getTasks(user?.userId?? 0);
-      } )
-    }
+  
+     const token = localStorage.getItem('myChallengeToken');
+     if(token)
+     {
+      const tokenNonString = JSON.parse(token);
+      this.currentuser = tokenNonString.data.user;
+     }
+     this.toDoservice.getTaskByUserId(this.currentuser.userId).subscribe((response) => {
+      this.taskList = response;
+     });
    
   }
 
 
- getTasks(id:number)
- {
-  this.toDoservice.getTaskByUserId(id).subscribe(tasks => {
- 
-    this.tasks = tasks.map(task => new Task(task))
-    
-  } 
-  )
- }
+
  
  
   createTask(): void
@@ -83,7 +78,7 @@ export class MyDashboardComponent implements OnInit{
       this.taskCreated.emit(true);
 
       console.log('Fetching tasks after creation...');
-      this.getTasks(this.userId);
+   
     });
   }
 

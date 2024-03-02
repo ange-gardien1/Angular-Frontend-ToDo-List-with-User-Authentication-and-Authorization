@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, catchError, throwError } from 'rxjs';
+import { Observable, catchError, map, of, throwError } from 'rxjs';
 import { Task } from '../modules/task';
 
 @Injectable({
@@ -39,9 +39,24 @@ tokenKey: string = "myChallengeToken";
 //  return this.http.delete(`${this.apiUrl}/${taskId}`, {headers: reqHeaders});
 //   }
  
-  getTaskByUserId(userId: number)
+  getTaskByUserId(userId: string): Observable<any>
   {
-    return this.http.get<Task[]>(`${this.apiUrl}/user/${userId}`);
+    const stringToken = localStorage.getItem('myChallengeToken');
+    if (stringToken)
+    {
+      const tokenJson = JSON.parse(stringToken);
+      const headers = new HttpHeaders().set('Authorization',`Bearer ${tokenJson.tokenKey}`);
+      return this.http.get<any>(`${this.apiUrl}/user/${userId}`, {
+        headers: headers,
+      })
+      .pipe(map((response) => (response.data ? response.data.task: [])));
+    }
+    else{
+      console.log('invalid token');
+      return of([]);
+    }
+
+    
     
   }
 }
