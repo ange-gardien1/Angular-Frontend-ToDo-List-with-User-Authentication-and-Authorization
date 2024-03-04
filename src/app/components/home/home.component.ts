@@ -14,12 +14,14 @@ taskList: Task [] = [];
 constructor(private todoservice: TodoService, private router:Router)
 {}
   ngOnInit(): void {
-    this.reloadTask();
+   this.todoservice.getAllTasks().subscribe((response) => {
+    console.log('Received tasks:', response);
+    this.taskList = response;
+  
+   },
+   (error) => {
+    console.error("error fetching tasks:", error);
+   });
   }
-  reloadTask()
-  {
-    this.todoservice.getAllTasks().subscribe(tasks => {
-      this.taskList = tasks.map(task => new Task(task));
-    });
-  }
+ 
 }

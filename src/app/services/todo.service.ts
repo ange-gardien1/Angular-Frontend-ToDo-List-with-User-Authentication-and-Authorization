@@ -46,6 +46,10 @@ tokenKey: string = "myChallengeToken";
   }
   getAllTasks(): Observable<Task[]>
   {
-    return this.http.get<Task[]>(`${this.apiUrl}`);
+   return this.http.get<any>(this.apiUrl).pipe(map((response) => {
+  
+    return response;
+   })
+   );
   }
 }
