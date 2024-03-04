@@ -42,8 +42,12 @@ export class MyDashboardComponent implements OnInit{
   
             if (decodedToken && decodedToken.unique_name) {
               // console.log('User Name:', decodedToken.unique_name);
-              this.currentuser = { name: decodedToken.unique_name };
-            } else {
+              const userId = decodedToken.sub;
+              this.currentuser = {name: decodedToken.unique_name, userId:userId };
+              // console.log('decoden token',decodedToken);
+            } 
+          
+            else {
               console.error('Invalid JWT structure:', decodedToken);
             }
           } catch (error) {
@@ -56,9 +60,15 @@ export class MyDashboardComponent implements OnInit{
     });
   
    
-     this.toDoservice.getTaskByUserId(this.currentuser.userId).subscribe(() => {
-      this.taskList = this.tasks;
+     this.toDoservice.getTaskByUserId(this.currentuser.userId).subscribe((response) => {
+      // console.log('Received taks:', response);
+      this.taskList = response;
+     },
+     (error) => {
+      console.error("error fetching tasks: ", error);
      });
+
+
    
   }
 
@@ -73,7 +83,19 @@ export class MyDashboardComponent implements OnInit{
       this.taskCreated.emit(true);
 
       console.log('Fetching tasks after creation...');
+      this.refreshTaskList();
    
+    });
+  }
+
+  private refreshTaskList(): void
+  {
+    this.toDoservice.getTaskByUserId(this.currentuser.userId).subscribe((response) => {
+     console.log('Received tasks after creation:', response);
+     this.taskList = response; 
+    },
+    (error) => {
+      console.error("error fetching task after creation: ", error);
     });
   }
 

@@ -41,7 +41,9 @@ tokenKey: string = "myChallengeToken";
  
   getTaskByUserId(userId: number)
   {
-    return this.http.get<Task[]>(`${this.apiUrl}/user/${userId}`);
+    return this.http.get<Task[]>(`${this.apiUrl}/user/${userId}`).pipe(map((response) => {
+      return response;
+    }));
      
   }
   getAllTasks(): Observable<Task[]>
